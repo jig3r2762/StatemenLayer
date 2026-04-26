@@ -1,0 +1,7 @@
+Owner Name,Property Address,Statement Month,Date,Description,Category,Amount,Net to Owner
+Jane Smith,"101 Pine Street, Austin TX",05/01/2026,05/01/2026,May Rent,rent,2400.00,
+Jane Smith,"101 Pine Street, Austin TX",05/01/2026,05/12/2026,Plumbing Repair,plumbing,180.00,
+Jane Smith,"101 Pine Street, Austin TX",05/01/2026,05/01/2026,Management Fee,management fee,192.00,2028.00
+John Doe,"250 Oak Ave, Austin TX",05/01/2026,05/01/2026,May Rent,rent,1950.00,
+John Doe,"250 Oak Ave, Austin TX",05/01/2026,05/08/2026,HVAC Service,hvac,120.00,
+John Doe,"250 Oak Ave, Austin TX",05/01/2026,05/01/2026,Management Fee,management fee,156.00,1674.00

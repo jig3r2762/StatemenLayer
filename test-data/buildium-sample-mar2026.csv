@@ -1,0 +1,14 @@
+Owner Name,Rental Property,Statement Period,Date,Description,Chart of Accounts,Amount
+James Wilson,"124 Oak Street, Austin TX",03/01/2026,03/01/2026,March Rent,rent,2400.00
+James Wilson,"124 Oak Street, Austin TX",03/01/2026,03/15/2026,Appliance Repair - Dishwasher,repair,210.00
+James Wilson,"124 Oak Street, Austin TX",03/01/2026,03/20/2026,Monthly Landscaping,landscaping,75.00
+James Wilson,"124 Oak Street, Austin TX",03/01/2026,03/01/2026,Management Fee,management fee,192.00
+Sarah Chen,"892 Maple Avenue, Austin TX",03/01/2026,03/01/2026,March Rent,rent,1850.00
+Sarah Chen,"892 Maple Avenue, Austin TX",03/01/2026,03/01/2026,Parking Space,parking,50.00
+Sarah Chen,"892 Maple Avenue, Austin TX",03/01/2026,03/22/2026,Window Cleaning,cleaning,95.00
+Sarah Chen,"892 Maple Avenue, Austin TX",03/01/2026,03/01/2026,Management Fee,management fee,148.00
+Robert Martinez,"2301 Creek Road, Austin TX",03/01/2026,03/01/2026,Unit 1 - March Rent,rent,3200.00
+Robert Martinez,"2301 Creek Road, Austin TX",03/01/2026,03/01/2026,Unit 2 - March Rent,rent,2900.00
+Robert Martinez,"2301 Creek Road, Austin TX",03/01/2026,03/08/2026,Plumbing - Water Heater,plumbing,340.00
+Robert Martinez,"2301 Creek Road, Austin TX",03/01/2026,03/15/2026,Lawn Care,landscaping,56.00
+Robert Martinez,"2301 Creek Road, Austin TX",03/01/2026,03/01/2026,Management Fee,management fee,488.00

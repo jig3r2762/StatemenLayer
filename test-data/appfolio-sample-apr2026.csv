@@ -1,0 +1,17 @@
+Owner Name,Property Address,Statement Month,Date,Description,Category,Amount,Net to Owner
+James Wilson,"124 Oak Street, Austin TX",04/01/2026,04/01/2026,April Rent,rent,2400.00,
+James Wilson,"124 Oak Street, Austin TX",04/01/2026,04/04/2026,Late Fee,late fee,75.00,
+James Wilson,"124 Oak Street, Austin TX",04/01/2026,04/12/2026,Plumbing Repair - Kitchen Sink,plumbing,285.00,
+James Wilson,"124 Oak Street, Austin TX",04/01/2026,04/18/2026,Monthly Landscaping,landscaping,75.00,
+James Wilson,"124 Oak Street, Austin TX",04/01/2026,04/01/2026,Management Fee,management fee,192.00,1923.00
+Sarah Chen,"892 Maple Avenue, Austin TX",04/01/2026,04/01/2026,April Rent,rent,1850.00,
+Sarah Chen,"892 Maple Avenue, Austin TX",04/01/2026,04/01/2026,Parking Space,parking,50.00,
+Sarah Chen,"892 Maple Avenue, Austin TX",04/01/2026,04/10/2026,HVAC Service - Annual,hvac,195.00,
+Sarah Chen,"892 Maple Avenue, Austin TX",04/01/2026,04/25/2026,Pest Control,maintenance,74.00,
+Sarah Chen,"892 Maple Avenue, Austin TX",04/01/2026,04/01/2026,Management Fee,management fee,148.00,1483.00
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/01/2026,Unit 1 - April Rent,rent,3200.00,
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/01/2026,Unit 2 - April Rent,rent,2900.00,
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/12/2026,Roof Repair - Storm Damage,roofing,890.00,
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/18/2026,Electrical Panel Upgrade,electrical,284.00,
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/22/2026,Lawn Care,landscaping,56.00,
+Robert Martinez,"2301 Creek Road, Austin TX",04/01/2026,04/01/2026,Management Fee,management fee,488.00,4382.00

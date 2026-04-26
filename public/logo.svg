@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 38" fill="none">
+  
+  <rect x="0" y="0" width="7" height="7" rx="1.5" fill="#111827" opacity="0.18"></rect>
+  <rect x="11" y="0" width="14" height="7" rx="1.5" fill="#111827" opacity="0.18"></rect>
+  <rect x="27" y="0" width="7" height="7" rx="1.5" fill="#111827" opacity="0.18"></rect>
+
+  <rect x="0" y="11" width="7" height="7" rx="1.5" fill="#111827" opacity="0.35"></rect>
+  <rect x="11" y="11" width="10" height="7" rx="1.5" fill="#111827" opacity="0.35"></rect>
+  <rect x="23" y="11" width="11" height="7" rx="1.5" fill="#111827" opacity="0.35"></rect>
+
+  <rect x="0" y="21" width="34" height="1" fill="#111827" opacity="0.12"></rect>
+
+  <rect x="0" y="26" width="7" height="8" rx="1.5" fill="#F59E0B"></rect>
+  <rect x="11" y="26" width="17" height="8" rx="1.5" fill="#F59E0B"></rect>
+  <rect x="30" y="26" width="4" height="8" rx="1.5" fill="#F59E0B" opacity="0.5"></rect>
+
+  
+  <text x="46" y="27" font-family="&#39;DM Serif Display&#39;, Georgia, serif" font-size="22" fill="#111827" letter-spacing="-0.3">StatementLayer</text>
+</svg>

@@ -1,0 +1,25 @@
+Owner,Property,Transaction Date,Description,Account,Amount,Management Fee,Net to Owner
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/01/2026,May Rent,Rental Income,2450.00,,
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/04/2026,Late Fee Collected,Late Fees,75.00,,
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/10/2026,Plumbing - kitchen faucet,Repairs & Maintenance,-165.00,,
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/15/2026,Landscaping - monthly,Landscaping,-75.00,,
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/01/2026,Water & Sewer,Utilities,-38.50,,
+James Wilson,"124 Oak Street Unit 4, Austin TX 78701",05/01/2026,Management Fee,Management Fees,-196.00,196.00,2050.50
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/01/2026,May Rent,Rental Income,1875.00,,
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/01/2026,Parking - covered space,Parking Income,50.00,,
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/14/2026,HVAC Annual Service,HVAC,-195.00,,
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/20/2026,Pest Control - quarterly,Pest Control,-89.00,,
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/05/2026,Electric common area,Utilities,-42.00,,
+Sarah Chen,"892 Maple Avenue Unit 2, Austin TX 78704",05/01/2026,Management Fee,Management Fees,-150.00,150.00,1449.00
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/01/2026,May Rent - Unit 1,Rental Income,3250.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/01/2026,May Rent - Unit 2,Rental Income,2950.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/03/2026,Water & Sewer - both units,Utilities,-112.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/09/2026,Electrical panel inspection,Electrical,-180.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/15/2026,Landscaping - monthly x2,Landscaping,-110.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/18/2026,Roof patch - storm damage,Repairs & Maintenance,-440.00,,
+Robert Martinez,"2301 Creek Road Unit 1, Austin TX 78745",05/01/2026,Management Fee,Management Fees,-496.00,496.00,4862.00
+Patricia Nguyen,"5510 River Bend Dr Unit 8, Austin TX 78730",05/01/2026,May Rent,Rental Income,2100.00,,
+Patricia Nguyen,"5510 River Bend Dr Unit 8, Austin TX 78730",05/06/2026,Electric common area,Utilities,-55.00,,
+Patricia Nguyen,"5510 River Bend Dr Unit 8, Austin TX 78730",05/12/2026,Lock re-key after tenant move-out,Repairs & Maintenance,-95.00,,
+Patricia Nguyen,"5510 River Bend Dr Unit 8, Austin TX 78730",05/19/2026,Interior paint touch-up,Repairs & Maintenance,-320.00,,
+Patricia Nguyen,"5510 River Bend Dr Unit 8, Austin TX 78730",05/01/2026,Management Fee,Management Fees,-168.00,168.00,1462.00

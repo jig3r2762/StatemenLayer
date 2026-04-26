@@ -1,0 +1,7 @@
+Owner,Property,Month,Line Item,Category,Amount,Owner Disbursement
+Jane Smith,101 Pine Street,2026-05,May Rent,rent,2400.00,
+Jane Smith,101 Pine Street,2026-05,Plumbing Repair,plumbing,-180.00,
+Jane Smith,101 Pine Street,2026-05,Management Fee,management fee,-192.00,2028.00
+John Doe,250 Oak Ave,2026-05,May Rent,rent,1950.00,
+John Doe,250 Oak Ave,2026-05,HVAC Service,hvac,-120.00,
+John Doe,250 Oak Ave,2026-05,Management Fee,management fee,-156.00,1674.00
