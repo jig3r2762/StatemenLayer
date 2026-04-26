@@ -5,10 +5,11 @@
 
 ---
 
-## Overall Status: FEATURE COMPLETE — PENDING RESEND KEY + DEPLOYMENT
+## Overall Status: LIVE ON VERCEL — PENDING WEBHOOKS + STRIPE
 
-**Current Phase:** Week 4 — Selective Send + UX Polish (session 2)
-**Last Updated:** 2026-04-26
+**Current Phase:** Deployed + Live
+**Last Updated:** 2026-04-27
+**Live URL:** https://statement-layer.vercel.app
 
 ---
 
@@ -245,11 +246,12 @@
 - [x] Run migration 004 (`alter table owners add column property_address text`) — **DONE**
 - [x] Run migration 005 (`alter table accounts add column from_name/reply_to_email`) — **DONE**
 - [x] Resend API key + verified sending domain — **DONE** (send tested successfully with real email)
-- [ ] Anthropic API key — add `ANTHROPIC_API_KEY` to `.env.local` (optional; Groq is active backup)
-- [ ] Register Clerk webhook in Clerk dashboard (`/api/webhooks/clerk`)
-- [ ] Register Resend webhook in Resend dashboard (`/api/webhooks/resend`)
-- [ ] Stripe keys + webhook registration (`/api/webhooks/stripe`)
-- [ ] Vercel deployment + production env vars
+- [x] Vercel deployment — **LIVE** at https://statement-layer.vercel.app (2026-04-27)
+- [x] Production env vars set in Vercel dashboard — **DONE**
+- [ ] Anthropic API key — optional; Groq is active backup
+- [ ] Register Clerk webhook in Clerk dashboard → `https://statement-layer.vercel.app/api/webhooks/clerk`
+- [ ] Register Resend webhook in Resend dashboard → `https://statement-layer.vercel.app/api/webhooks/resend`
+- [ ] Stripe keys + webhook → `https://statement-layer.vercel.app/api/webhooks/stripe`
 - [ ] Custom domain
 
 ---
