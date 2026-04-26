@@ -6,7 +6,7 @@ import type { Account, MonthlyTrend, Owner, PrevMonthFigures } from "@/types/dat
 import type { NormalizedReport } from "@/types/parsers";
 
 export const runtime = "nodejs";
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 function sanitizeFilename(value: string): string {
   return value.replace(/[\/\\:]/g, "-").replace(/\s+/g, " ").trim();
