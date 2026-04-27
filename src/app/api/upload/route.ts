@@ -18,7 +18,20 @@ export async function POST(req: Request) {
     .single();
 
   if (accountErr || !account) {
-    return NextResponse.json({ error: "Account not found" }, { status: 404 });
+    console.error("[upload] account lookup failed", {
+      userId,
+      supabaseUrl: process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "missing",
+      errorCode: accountErr?.code,
+      errorMsg: accountErr?.message,
+    });
+    return NextResponse.json({
+      error: "Account not found",
+      debug: {
+        userId,
+        url: (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "missing").slice(0, 40),
+        supabaseError: accountErr?.message ?? "no error, data was null",
+      },
+    }, { status: 404 });
   }
 
   const formData = await req.formData();
