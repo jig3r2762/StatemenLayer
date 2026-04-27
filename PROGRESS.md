@@ -7,9 +7,35 @@
 
 ## Overall Status: LIVE ON VERCEL — PENDING WEBHOOKS + STRIPE
 
-**Current Phase:** Deployed + Live
+**Current Phase:** Deployed + Live — Parser hardened for real-world CSVs
 **Last Updated:** 2026-04-27
 **Live URL:** https://statement-layer.vercel.app
+
+---
+
+### Round 7 — Parser Hardening + PDF/Email Polish — COMPLETE ✅ (2026-04-27)
+
+#### Real-World AppFolio GL Export Support
+- [x] **GL-style fingerprint detection** — `isAppFolioFile()` now has a second detection path: headers containing `property` + `account` + `balance` together = AppFolio GL format. Catches exports that have no "owner statement" / "net to owner" text in headers.
+- [x] **`owner_name` no longer required** — Removed from `criticalFields`. GL exports have no owner column; parser falls back to property name with a parse warning. Old-style exports with `Owner Name` column work exactly as before.
+- [x] **Unit + Payee columns added** — `unit` and `payee/payer` signatures added to `AF_SIGNATURES`. Both captured per line item in `LineItem.unit` and `LineItem.payee`. "All" unit rows (management fees) get `unit: undefined` so they don't create ambiguity.
+- [x] **`ColumnMapper` updated** — Added `unit` and `payee` fields to manual mapping UI. `owner_name` marked `required: false`. `line_item_category` label updated to "Line Item Category / GL Account".
+
+#### Multi-Row Header Detection
+- [x] **`findHeaderRow()` in `normalize.ts`** — Scans up to 10 raw rows; skips rows with fewer than 3 non-empty cells (metadata rows: report titles, date ranges, company names); returns index of first row where ≥ 2 cells match known column signature keywords. Falls back to row 0.
+- [x] **Both parsers use raw-mode reading** — AppFolio + Buildium parsers now parse with `header: false` first, call `findHeaderRow`, then reconstruct headers/rows from the real header row. Empty columns from metadata sections are filtered out.
+- [x] **`detectPmsType` updated** — Reads up to 10 rows (was `preview: 1`); calls `findHeaderRow` before fingerprinting so GL exports with title rows are detected correctly.
+- [x] **`skippedRows` warning** — Each report gets a `parse_warning` when metadata rows were skipped (e.g. "Skipped 3 metadata row(s) before headers.").
+
+#### Priority-First Column Detection Fix
+- [x] **Root bug fixed** — Old `detectColumns` checked `c.includes(lower[i])` (candidate contains header), causing false positives: `"property owner".includes("property")` stole "Property" for `owner_name`; `"unit address".includes("unit")` stole "Unit" for `property_address`. Broke grouping for any CSV with a plain "Property" header.
+- [x] **Priority-first matching** — New approach: for each field, iterate candidates in defined order (most specific first), then scan all unmatched headers for each candidate. First candidate that finds a header wins. Result: "Category" column wins over "Type" for `line_item_category`; "Property" correctly maps to `property_address`; "Unit" correctly maps to `unit`.
+- [x] **Both parsers fixed** — Same rewrite applied to `appfolio.ts` and `buildium.ts` `detectColumns` functions.
+
+#### PDF & Email Polish
+- [x] **Logo in all 3 PDF templates** — `account.logo_url` now rendered in the hero header of `standard.ts`, `detailed.ts`, and `summary.ts`. Logo upload was fully wired (API + Supabase storage + settings UI) but never displayed in the actual PDF output.
+- [x] **Unit column in detailed template** — Line items table (`Date | Description | Amount`) now conditionally shows a `Unit` column when at least one transaction in the group has a unit value. Hidden entirely for simplified CSVs with no unit data.
+- [x] **`from_name` + `reply_to_email` actually used** — Both batch send (`/api/batches/[id]/send`) and single resend (`/api/reports/[id]/resend`) routes now select `from_name` and `reply_to_email` from account. Email sender display name uses `from_name` (falls back to `firm_name`). Owner replies route to `reply_to_email` when set. Settings page already had the UI and DB columns — this closed the end-to-end gap.
 
 ---
 
@@ -329,3 +355,8 @@
 | 2026-04-27 | CSS utility classes + !important to override inline styles | App uses inline styles throughout; media queries can't target inline styles without !important — utility classes in globals.css are the only viable approach without full rewrite |
 | 2026-04-27 | Sidebar drawer self-contained in Sidebar.tsx | Sidebar is already a client component; renders mobile top bar, overlay, and aside from one component — no layout changes or context needed |
 | 2026-04-27 | Hero demo panel hidden on mobile (not stacked) | HeroDemo is an animated 460px component; it would be unusable at 375px and kill page load — hiding it is the right trade-off for mobile conversion |
+| 2026-04-27 | Priority-first candidate matching in detectColumns | Old `c.includes(lower[i])` check caused false positives ("property owner" stealing "Property" header). New approach iterates candidates by priority, scans all headers per candidate — more specific candidates win regardless of column order in the file |
+| 2026-04-27 | findHeaderRow scans up to 10 rows for real header | AppFolio/Buildium exports often have 2–5 metadata rows (report title, date range, blank line) before actual column headers. Scanning ≥3 non-empty cells + ≥2 keyword matches reliably finds the real header row |
+| 2026-04-27 | owner_name removed from criticalFields | AppFolio GL exports have no owner column — making it required blocked all GL-format files. Falls back to property name with a parse warning; old-style exports still map owner_name correctly when the column exists |
+| 2026-04-27 | Logo in PDF was stored but never rendered | account.logo_url was uploaded to Supabase and saved to DB, but none of the 3 PDF templates referenced it — white-label feature was half-built. Fixed in all 3 templates. |
+| 2026-04-27 | from_name/reply_to_email existed in DB but not used at send time | Both fields had settings UI and DB columns since Week 4 but send routes only queried firm_name. Closed the gap so PMs' custom sender name and reply-to address actually appear in owner emails |
