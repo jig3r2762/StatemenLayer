@@ -13,6 +13,28 @@
 
 ---
 
+### Round 6 — Full Mobile Responsiveness — COMPLETE ✅ (2026-04-27)
+- [x] **Sidebar** — Mobile drawer: `position: fixed`, slides in from left on ≤1024px viewports. Sticky 48px top bar (hamburger + logo) rendered above main content on mobile. Overlay + close button. Route change auto-closes drawer. Desktop unchanged.
+- [x] **Dashboard layout** — `main` gets `sl-main-content` class → `padding-top: 48px` on mobile to clear sticky bar.
+- [x] **Header** — Font size uses `clamp(20px, 4vw, 28px)`. Padding reduced to `14px 16px` on mobile via `header-mobile` class.
+- [x] **Stats grids** — `grid-4` and `grid-3` CSS classes collapse all 4-col and 3-col grids: 2-col on tablet (≤1024px), 1-col on phone (≤480px for grid-4, ≤640px for grid-3).
+- [x] **Dashboard right sidebar** (`1fr 300px`) — `grid-sidebar-right` stacks to single column on tablet.
+- [x] **Settings page** — `grid-settings` collapses 200px tab sidebar to full-width. Tabs become a horizontal-scrollable flex row on mobile.
+- [x] **All tables** (Batches, Owners, Reports) — wrapped in `overflowX: auto` scroll containers with `minWidth` to prevent layout break.
+- [x] **BatchesClient filter bar** — `flexWrap: "wrap"` so dropdowns wrap on narrow screens.
+- [x] **BatchStickyBar** — `px-page` class reduces horizontal padding to 16px on mobile.
+- [x] **Upload page** — `px-page` removes excess horizontal padding on mobile.
+- [x] **All dashboard page bodies** — `px-page` class: 32px → 16px on mobile.
+- [x] **Landing page nav** — Extracted to `LandingNav.tsx` client component. Desktop links hidden on mobile. Hamburger button shows; tapping opens a dropdown with all nav links + "Start free trial" CTA.
+- [x] **Landing hero** — `grid-hero` collapses 2-col grid to 1-col on ≤900px. Hero demo panel hidden on mobile (`hero-demo-panel`). Hero copy padding adjusts.
+- [x] **Landing sections** (Features, How it works, Testimonials, Pricing, CTA) — `landing-section` reduces padding to `64px 20px` on mobile.
+- [x] **Landing CTA banner** — `landing-cta-inner` reduces inner padding on mobile.
+- [x] **Landing footer** — `landing-footer-inner` stacks to column on mobile. Link columns hidden (`landing-footer-links`). Bottom bar wraps.
+- [x] **Demo page** — Stats grid (`grid-3`) and CTA section (`grid-sidebar-right`) collapse on mobile. Nav padding tightened.
+- [x] **globals.css** — Full responsive CSS system with named utility classes and `!important` overrides for inline styles.
+
+---
+
 ## CRITICAL: Next.js 16 Breaking Changes
 
 - **Middleware file is `src/proxy.ts`** — NOT `middleware.ts`. Next.js 16 renamed it. Never create `middleware.ts`.
@@ -304,3 +326,6 @@
 | 2026-04-26 | SSE streaming for generate route instead of JSON | Progress events let the UI show per-owner confirmation live; 4-owner batch at ~15s each would timeout a JSON response |
 | 2026-04-26 | BatchDetailClient wrapper for selection state | BatchStickyBar and ReportsTableClient are siblings — needed a shared client parent to pass selectedIds between them without prop-drilling through a server component |
 | 2026-04-26 | Selective send passes reportIds only when non-empty | Empty body = send all (backward compat); populated body = filtered send. No API flag needed. |
+| 2026-04-27 | CSS utility classes + !important to override inline styles | App uses inline styles throughout; media queries can't target inline styles without !important — utility classes in globals.css are the only viable approach without full rewrite |
+| 2026-04-27 | Sidebar drawer self-contained in Sidebar.tsx | Sidebar is already a client component; renders mobile top bar, overlay, and aside from one component — no layout changes or context needed |
+| 2026-04-27 | Hero demo panel hidden on mobile (not stacked) | HeroDemo is an animated 460px component; it would be unusable at 375px and kill page load — hiding it is the right trade-off for mobile conversion |
