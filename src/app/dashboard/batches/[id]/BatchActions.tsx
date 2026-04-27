@@ -24,11 +24,14 @@ export function BatchActions({ batch, reportsCount }: { batch: ReportBatch; repo
   const [generating, setGenerating] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [generateError, setGenerateError] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
 
   async function handleGenerate() {
     setGenerating(true);
+    setGenerateError(null);
     setProgress({ done: 0, total: reportsCount });
+    const firstErrors: string[] = [];
     try {
       const res = await fetch(`/api/batches/${batch.id}/generate`, { method: "POST" });
       if (!res.body) { router.refresh(); return; }
@@ -48,18 +51,25 @@ export function BatchActions({ batch, reportsCount }: { batch: ReportBatch; repo
           if (!line.startsWith("data: ")) continue;
           try {
             const event = JSON.parse(line.slice(6)) as {
-              type: string; done?: number; total?: number; ownerName?: string; status?: string;
+              type: string; done?: number; total?: number; ownerName?: string;
+              status?: string; message?: string;
             };
             if (event.type === "progress" && event.done != null && event.total != null) {
               setProgress({ done: event.done, total: event.total, lastOwner: event.ownerName });
               router.refresh();
             }
+            if (event.type === "error" && event.message && firstErrors.length < 1) {
+              firstErrors.push(event.message);
+            }
             if (event.type === "complete") {
+              if (firstErrors.length > 0) setGenerateError(firstErrors[0]);
               router.refresh();
             }
           } catch { /* malformed chunk — skip */ }
         }
       }
+    } catch (err) {
+      setGenerateError(err instanceof Error ? err.message : "Network error");
     } finally {
       setGenerating(false);
       setProgress(null);
@@ -106,6 +116,11 @@ export function BatchActions({ batch, reportsCount }: { batch: ReportBatch; repo
             <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "#059669" }}>
               <CheckCircle2 style={{ width: 11, height: 11 }} />
               {progress.lastOwner}&apos;s report ready
+            </div>
+          )}
+          {!generating && generateError && (
+            <div style={{ fontSize: 12, color: "#DC2626", maxWidth: 320 }}>
+              Error: {generateError}
             </div>
           )}
         </div>

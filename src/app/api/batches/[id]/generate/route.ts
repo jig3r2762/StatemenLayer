@@ -146,12 +146,10 @@ export async function POST(
           generated += 1;
           controller.enqueue(sse({ type: "progress", done: generated, total, reportId: rawReport.id, ownerName }));
         } catch (error) {
-          console.error(
-            `[batch-generate] batch=${batch.id} report=${rawReport.id} failed`,
-            error instanceof Error ? error.message : "Unknown error"
-          );
-          errors.push(`Report ${rawReport.id}: generation failed`);
-          controller.enqueue(sse({ type: "error", reportId: rawReport.id }));
+          const msg = error instanceof Error ? error.message : String(error);
+          console.error(`[batch-generate] batch=${batch.id} report=${rawReport.id} failed:`, msg);
+          errors.push(`Report ${rawReport.id}: ${msg}`);
+          controller.enqueue(sse({ type: "error", reportId: rawReport.id, message: msg }));
         }
       }
 
