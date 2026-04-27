@@ -129,16 +129,16 @@ export default function SettingsPage() {
   return (
     <div style={{ flex: 1 }}>
       <Header title="Settings" />
-      <div style={{ padding: "0 32px 32px" }}>
+      <div className="px-page" style={{ padding: "0 32px 32px" }}>
         {errors.length > 0 && (
           <div style={{ background: "#FEF2F2", border: "1px solid #FEE2E2", borderRadius: 8, padding: "12px 16px", fontSize: 13, color: "#B91C1C", marginBottom: 16 }}>
             {errors.join(" ")}
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 20, alignItems: "flex-start" }}>
+        <div className="grid-settings" style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 20, alignItems: "flex-start" }}>
           {/* Tab sidebar */}
-          <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, boxShadow: "0 1px 3px rgba(10,15,30,0.06)", padding: 8 }}>
+          <div className="settings-tabs" style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, boxShadow: "0 1px 3px rgba(10,15,30,0.06)", padding: 8, display: "flex", flexDirection: "column" }}>
             {tabs.map((t) => (
               <button
                 key={t.id}

@@ -135,7 +135,8 @@ export function ReportsTableClient({ reports, month, pendingCount, selectedIds, 
           </div>
         </div>
 
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
           <thead>
             <tr style={{ background: "#FAFAFA" }}>
               {showSelect && (
@@ -219,6 +220,7 @@ export function ReportsTableClient({ reports, month, pendingCount, selectedIds, 
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );

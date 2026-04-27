@@ -61,7 +61,7 @@ export default async function BatchesPage() {
         }
       />
 
-      <div style={{ padding: "0 32px 32px" }}>
+      <div className="px-page" style={{ padding: "0 32px 32px" }}>
         {/* Stats bar */}
         <div style={{ display: "flex", gap: 24, marginBottom: 20, fontSize: 13, color: "#6B7280" }}>
           <span><span style={{ fontWeight: 600, color: "#111827", fontFamily: "var(--font-jetbrains, monospace)" }}>{totals.sent}</span> sent</span>

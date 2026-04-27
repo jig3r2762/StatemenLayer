@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "#FAF8F4" }}>
       <Sidebar firmName={account?.firm_name ?? ""} plan={(account?.plan as string) ?? "starter"} />
-      <main style={{ flex: 1, overflow: "auto", minWidth: 0 }}>
+      <main className="sl-main-content" style={{ flex: 1, overflow: "auto", minWidth: 0 }}>
         {children}
         <DashboardProgressBar />
       </main>

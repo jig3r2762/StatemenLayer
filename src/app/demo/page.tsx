@@ -186,7 +186,7 @@ export default function DemoPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#FAF8F4", fontFamily: "var(--font-dm-sans, sans-serif)" }}>
       {/* Nav */}
-      <nav style={{ borderBottom: "1px solid #E5E7EB", background: "white", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav style={{ borderBottom: "1px solid #E5E7EB", background: "white", padding: "0 20px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ textDecoration: "none", fontFamily: "var(--font-display-serif, serif)", fontSize: 18, fontWeight: 700, color: "#0A0F1E" }}>
           StatementLayer
         </Link>
@@ -296,7 +296,7 @@ export default function DemoPage() {
               </div>
 
               {/* Value prop + sign up */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "center" }}>
+              <div className="grid-sidebar-right" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "center" }}>
                 <div>
                   <div style={{ fontSize: 18, fontWeight: 700, color: "#111827", fontFamily: "var(--font-display-serif, serif)", marginBottom: 8 }}>
                     Stop opening Excel for this every month.
@@ -327,7 +327,7 @@ export default function DemoPage() {
 
         {/* Stats grid — idle state only */}
         {stage === "idle" && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 28 }}>
+          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 28 }}>
             {[
               { n: "< 2 min", label: "upload to sent", sub: "for a full batch of owner reports" },
               { n: "8–10 hrs", label: "saved per month", sub: "vs. manual Excel formatting" },

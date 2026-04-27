@@ -115,7 +115,7 @@ async function StatsRow({ dp }: { dp: ReturnType<typeof getDashboardData> }) {
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+    <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
       {stats.map((s) => (
         <div key={s.label} style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, padding: "16px 18px", boxShadow: "0 1px 3px rgba(10,15,30,0.06)" }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 8 }}>{s.label}</div>
@@ -216,7 +216,7 @@ async function OnboardingFlow({ dp }: { dp: ReturnType<typeof getDashboardData> 
 
   return (
     <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, boxShadow: "0 1px 3px rgba(10,15,30,0.06)", overflow: "hidden", marginBottom: 20 }}>
-      <div style={{ padding: "28px 32px", display: "flex", alignItems: "center", gap: 32 }}>
+      <div style={{ padding: "28px 32px", display: "flex", alignItems: "flex-start", gap: 32, flexWrap: "wrap" }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 17, fontWeight: 700, color: "#0A0F1E", marginBottom: 6, fontFamily: "var(--font-display-serif, serif)" }}>
             Upload your first CSV to get started
@@ -253,7 +253,7 @@ async function OnboardingFlow({ dp }: { dp: ReturnType<typeof getDashboardData> 
 /* ── Skeletons ── */
 function StatsSkeleton() {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+    <div className="grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, padding: "16px 18px", boxShadow: "0 1px 3px rgba(10,15,30,0.06)" }} className="animate-pulse">
           <div style={{ height: 11, width: 120, background: "#F3F4F6", borderRadius: 4, marginBottom: 8 }} />
@@ -273,7 +273,7 @@ export default async function DashboardPage() {
   return (
     <div style={{ flex: 1 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "28px 32px 20px" }}>
+      <div className="px-page" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "28px 32px 20px" }}>
         <DashboardGreeting />
         <Link
           href="/dashboard/upload"
@@ -291,7 +291,7 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <div style={{ padding: "0 32px 32px" }}>
+      <div className="px-page" style={{ padding: "0 32px 32px" }}>
         {/* Onboarding flow (new users only) */}
         <Suspense fallback={null}>
           <OnboardingFlow dp={dp} />
@@ -312,7 +312,7 @@ export default async function DashboardPage() {
         </Suspense>
 
         {/* Two columns */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 14 }}>
+        <div className="grid-sidebar-right" style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 14 }}>
           {/* Recent batches */}
           <Suspense
             fallback={

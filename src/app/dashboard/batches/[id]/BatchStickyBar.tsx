@@ -77,7 +77,7 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
         </div>
       )}
 
-      <div style={{ padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+      <div className="px-page" style={{ padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>
             {formatMonth(batch.month)} · {totalReports} report{totalReports !== 1 ? "s" : ""} ready to send

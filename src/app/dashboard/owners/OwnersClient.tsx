@@ -68,7 +68,8 @@ export function OwnersClient({ initialOwners }: { initialOwners: Owner[] }) {
         <span style={{ fontSize: 12, color: "#9CA3AF" }}>{filtered.length} owners</span>
       </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
         <thead>
           <tr style={{ background: "#FAFAFA" }}>
             {["Owner", "Email", "Property", "Reports sent", "Last sent", "Status", ""].map((h) => (
@@ -129,6 +130,7 @@ export function OwnersClient({ initialOwners }: { initialOwners: Owner[] }) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

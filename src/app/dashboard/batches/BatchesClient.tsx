@@ -83,7 +83,7 @@ export function BatchesClient({ rows, availableMonths }: { rows: BatchRow[]; ava
 
   return (
     <div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
         <select style={selectStyle} value={month} onChange={(e) => setMonth(e.target.value)}>
           <option value="all">All months</option>
           {availableMonths.map((m) => <option key={m} value={m}>{formatMonth(m)}</option>)}
@@ -106,7 +106,8 @@ export function BatchesClient({ rows, availableMonths }: { rows: BatchRow[]; ava
         </div>
       ) : (
         <div style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, boxShadow: "0 1px 3px rgba(10,15,30,0.06)", overflow: "hidden" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
             <thead>
               <tr style={{ background: "#FAFAFA" }}>
                 {["Batch", "Source file", "Owners", "Sent", "Status", "Date", ""].map((h, i) => (
@@ -162,6 +163,7 @@ export function BatchesClient({ rows, availableMonths }: { rows: BatchRow[]; ava
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

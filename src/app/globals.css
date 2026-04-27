@@ -138,3 +138,78 @@ html { scroll-behavior: smooth; }
   outline: 2px solid var(--amber-500);
   outline-offset: 2px;
 }
+
+/* ── Responsive ── */
+
+/* Dashboard sidebar — mobile drawer */
+@media (max-width: 1024px) {
+  .sl-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -240px !important;
+    bottom: 0 !important;
+    z-index: 300 !important;
+    transition: left 220ms ease !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    overflow-y: auto !important;
+  }
+  .sl-sidebar.open {
+    left: 0 !important;
+    box-shadow: 4px 0 32px rgba(10,15,30,0.5) !important;
+  }
+  .sl-mobile-header { display: flex !important; }
+  .sl-close-btn     { display: flex !important; }
+  .sl-main-content  { padding-top: 48px !important; }
+}
+@media (min-width: 1025px) {
+  .sl-mobile-header { display: none !important; }
+  .sl-close-btn     { display: none !important; }
+}
+
+/* Grid breakpoints — override inline styles via !important */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-sidebar-right { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 640px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-3 { grid-template-columns: 1fr !important; }
+  .grid-settings { grid-template-columns: 1fr !important; }
+  .settings-tabs { flex-direction: row !important; overflow-x: auto !important; }
+}
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr !important; }
+}
+
+/* Hero section — hide demo panel on mobile, stack columns */
+@media (max-width: 900px) {
+  .grid-hero { grid-template-columns: 1fr !important; padding: 0 24px !important; }
+  .hero-copy { padding: 64px 0 48px !important; }
+  .hero-demo-panel { display: none !important; }
+}
+
+/* Landing page */
+@media (max-width: 768px) {
+  .landing-nav-links { display: none !important; }
+  .landing-section { padding: 64px 20px !important; }
+  .landing-cta-inner { padding: 40px 24px !important; }
+  .landing-footer-inner { flex-direction: column !important; gap: 32px !important; }
+  .landing-footer-links { display: none !important; }
+  .landing-footer-bottom { flex-direction: column !important; gap: 8px !important; }
+}
+
+/* Landing mobile hamburger */
+@media (max-width: 768px) {
+  .landing-mobile-menu-btn { display: flex !important; }
+}
+@media (min-width: 769px) {
+  .landing-mobile-menu-btn { display: none !important; }
+}
+
+/* Page content padding on mobile */
+@media (max-width: 768px) {
+  .px-page { padding-left: 16px !important; padding-right: 16px !important; }
+  .header-mobile { padding: 14px 16px 10px !important; }
+}

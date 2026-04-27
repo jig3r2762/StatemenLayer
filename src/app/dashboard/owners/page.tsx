@@ -30,7 +30,7 @@ export default async function OwnersPage() {
           </Link>
         }
       />
-      <div style={{ padding: "0 32px 32px" }}>
+      <div className="px-page" style={{ padding: "0 32px 32px" }}>
         <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 16 }}>
           <span style={{ fontWeight: 600, color: "#111827" }}>{owners.length}</span> active owner{owners.length !== 1 ? "s" : ""}
           {plan === "starter" && <span style={{ color: "#9CA3AF" }}> · 10 max on Starter plan</span>}

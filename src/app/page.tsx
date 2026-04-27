@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { HeroDemo } from "./_components/HeroDemo";
+import { LandingNav } from "./_components/LandingNav";
 
 /* ── Logo mark SVG (inline, for dark backgrounds) ── */
 const LogoMark = () => (
@@ -59,30 +60,14 @@ export default function LandingPage() {
     <div style={{ minHeight: "100vh", background: "#FAF8F4", color: "#111827", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
 
       {/* ── Nav ── */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 200, background: "rgba(10,15,30,0.96)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 32px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <LogoMark />
-            <span style={{ fontFamily: "var(--font-display-serif, Georgia, serif)", fontSize: 18, color: "white", letterSpacing: "-0.2px" }}>StatementLayer</span>
-          </a>
-          <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-            {[["#features", "Features"], ["#how", "How it works"], ["#pricing", "Pricing"]].map(([href, label]) => (
-              <a key={href} href={href} style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>{label}</a>
-            ))}
-            <Link href="/sign-in" style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>Sign in</Link>
-            <Link href="/sign-up" style={{ background: "#F59E0B", color: "#0A0F1E", border: "none", borderRadius: 6, padding: "8px 18px", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>
-              Start free trial
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <LandingNav />
 
       {/* ── Hero ── */}
       <section style={{ background: "#0A0F1E", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 20% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px", display: "grid", gridTemplateColumns: "1fr 1.15fr", gap: 64, alignItems: "center", position: "relative" }}>
+        <div className="grid-hero" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px", display: "grid", gridTemplateColumns: "1fr 1.15fr", gap: 64, alignItems: "center", position: "relative" }}>
           {/* Left copy */}
-          <div style={{ padding: "96px 0 80px" }}>
+          <div className="hero-copy" style={{ padding: "96px 0 80px" }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#F59E0B", marginBottom: 18, display: "flex", alignItems: "center", gap: 7 }}>
               <span style={{ width: 20, height: 1, background: "#F59E0B", display: "inline-block" }} />
               For property managers
@@ -114,7 +99,7 @@ export default function LandingPage() {
             </div>
           </div>
           {/* Right: demo */}
-          <div style={{ padding: "48px 0", height: 500, display: "flex", alignItems: "center" }}>
+          <div className="hero-demo-panel" style={{ padding: "48px 0", height: 500, display: "flex", alignItems: "center" }}>
             <div style={{ width: "100%", height: 460 }}>
               <HeroDemo />
             </div>
@@ -123,7 +108,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features ── */}
-      <section id="features" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
+      <section id="features" className="landing-section" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div style={{ marginBottom: 60 }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D97706", marginBottom: 16 }}>Everything you need</div>
@@ -154,7 +139,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {FEATURES.map(({ id, title, desc }) => (
               <div key={id} style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 10, padding: 28, boxShadow: "0 1px 3px rgba(10,15,30,0.06)" }}>
                 <div style={{ width: 40, height: 40, background: "#FEF3C7", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
@@ -176,7 +161,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section id="how" style={{ background: "white", padding: "96px 32px" }}>
+      <section id="how" className="landing-section" style={{ background: "white", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div style={{ marginBottom: 60 }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D97706", marginBottom: 16 }}>How it works</div>
@@ -184,7 +169,7 @@ export default function LandingPage() {
               Three steps to cleaner<br />owner communication.
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32, position: "relative" }}>
+          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32, position: "relative" }}>
             <div style={{ position: "absolute", top: 24, left: "calc(16.6% + 20px)", right: "calc(16.6% + 20px)", height: 1, background: "#E5E7EB" }} />
             {[
               { num: "01", title: "Upload your CSV", desc: "Export from AppFolio, Buildium, or any system. Drag it in. We auto-detect the format — no manual column mapping needed." },
@@ -204,7 +189,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Testimonials ── */}
-      <section style={{ background: "#FAF8F4", padding: "96px 32px" }}>
+      <section className="landing-section" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div style={{ marginBottom: 56 }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D97706", marginBottom: 16 }}>From property managers</div>
@@ -212,7 +197,7 @@ export default function LandingPage() {
               They closed Excel.<br />They haven&apos;t opened it since.
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {TESTIMONIALS.map(({ initials, quote, name, role }) => (
               <div key={name} style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 10, padding: 24, boxShadow: "0 1px 3px rgba(10,15,30,0.06)" }}>
                 <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.7, marginBottom: 16, fontStyle: "italic" }}>&ldquo;{quote}&rdquo;</p>
@@ -230,7 +215,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Pricing ── */}
-      <section id="pricing" style={{ background: "white", padding: "96px 32px" }}>
+      <section id="pricing" className="landing-section" style={{ background: "white", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div style={{ marginBottom: 56 }}>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D97706", marginBottom: 16 }}>Pricing</div>
@@ -241,7 +226,7 @@ export default function LandingPage() {
               <span style={{ fontSize: 13, color: "#92400E", fontWeight: 500 }}>Most managers save 8–10 hrs/month — Starter pays for itself in the first hour you don&apos;t spend in Excel.</span>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div className="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {PRICING.map(({ name, price, period, doors, features, featured }) => (
               <div key={name} style={{ background: featured ? "#0A0F1E" : "white", border: featured ? "1px solid rgba(255,255,255,0.08)" : "1px solid #E5E7EB", borderRadius: 10, padding: 28 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: featured ? "rgba(255,255,255,0.4)" : "#9CA3AF", marginBottom: 12 }}>{name}</div>
@@ -265,9 +250,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section style={{ background: "#FAF8F4", padding: "96px 32px" }}>
+      <section className="landing-section" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
-          <div style={{ background: "#0A0F1E", borderRadius: 12, padding: "64px 48px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+          <div className="landing-cta-inner" style={{ background: "#0A0F1E", borderRadius: 12, padding: "64px 48px", textAlign: "center", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
             <h2 style={{ fontFamily: "var(--font-display-serif, Georgia, serif)", fontSize: 42, color: "white", marginBottom: 16, letterSpacing: "-0.02em", position: "relative" }}>
               Close Excel.<br />Open StatementLayer.
@@ -292,7 +277,7 @@ export default function LandingPage() {
 
       {/* ── Footer ── */}
       <footer style={{ background: "#0A0F1E", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "48px 32px 0" }}>
-        <div style={{ maxWidth: 1120, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: 40 }}>
+        <div className="landing-footer-inner" style={{ maxWidth: 1120, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: 40 }}>
           {/* Brand */}
           <div style={{ maxWidth: 240 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -307,7 +292,7 @@ export default function LandingPage() {
             { heading: "Account",  links: [["/sign-in", "Sign in"], ["/sign-up", "Start free trial"]] },
             { heading: "Legal",    links: [["#", "Privacy"], ["#", "Terms"], ["#", "Security"]] },
           ].map(({ heading, links }) => (
-            <div key={heading}>
+            <div key={heading} className="landing-footer-links">
               <h4 style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 12 }}>{heading}</h4>
               {links.map(([href, label]) => (
                 <a key={label} href={href} style={{ display: "block", fontSize: 13, color: "rgba(255,255,255,0.5)", textDecoration: "none", marginBottom: 8 }}>{label}</a>
@@ -315,7 +300,7 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        <div style={{ maxWidth: 1120, margin: "0 auto", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 0", display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.25)" }}>
+        <div className="landing-footer-bottom" style={{ maxWidth: 1120, margin: "0 auto", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 0", display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.25)" }}>
           <span>© {new Date().getFullYear()} StatementLayer, Inc. All rights reserved.</span>
           <span>Made for property managers.</span>
         </div>

@@ -189,7 +189,7 @@ export default function UploadPage() {
     <div style={{ flex: 1 }}>
       <Header title="Upload CSV" description="Import owner data — reports are generated automatically." />
 
-      <div style={{ padding: "0 32px 32px", maxWidth: 720 }}>
+      <div className="px-page" style={{ padding: "0 32px 32px", maxWidth: 720 }}>
         {errors.length > 0 && (
           <div style={{ background: "#FEF2F2", border: "1px solid #FEE2E2", borderRadius: 8, padding: "12px 16px", fontSize: 13, color: "#B91C1C", marginBottom: 16 }}>
             {errors.join(" ")}
