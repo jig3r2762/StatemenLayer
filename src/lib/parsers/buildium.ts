@@ -56,12 +56,17 @@ export function detectColumns(headers: string[]): {
   const matched = new Set<number>();
 
   for (const [field, candidates] of Object.entries(BD_SIGNATURES)) {
-    for (let i = 0; i < lower.length; i++) {
-      if (matched.has(i)) continue;
-      if (candidates.some((c) => lower[i].includes(c) || c.includes(lower[i]))) {
-        mapping[field as keyof ColumnMappingInput] = headers[i];
-        matched.add(i);
-        break;
+    let found = false;
+    for (const candidate of candidates) {
+      if (found) break;
+      for (let i = 0; i < lower.length; i++) {
+        if (matched.has(i)) continue;
+        if (lower[i].includes(candidate)) {
+          mapping[field as keyof ColumnMappingInput] = headers[i];
+          matched.add(i);
+          found = true;
+          break;
+        }
       }
     }
   }

@@ -67,13 +67,22 @@ export function detectColumns(headers: string[]): {
   const mapping: Partial<ColumnMappingInput> = {};
   const matched = new Set<number>();
 
+  // Priority-first: iterate candidates in order (most specific first),
+  // then scan headers for each candidate. This prevents loose partial
+  // matches (e.g. "property owner".includes("property")) from stealing
+  // the wrong column and gives higher-priority candidates precedence.
   for (const [field, candidates] of Object.entries(AF_SIGNATURES)) {
-    for (let i = 0; i < lower.length; i++) {
-      if (matched.has(i)) continue;
-      if (candidates.some((c) => lower[i].includes(c) || c.includes(lower[i]))) {
-        mapping[field as keyof ColumnMappingInput] = headers[i];
-        matched.add(i);
-        break;
+    let found = false;
+    for (const candidate of candidates) {
+      if (found) break;
+      for (let i = 0; i < lower.length; i++) {
+        if (matched.has(i)) continue;
+        if (lower[i].includes(candidate)) {
+          mapping[field as keyof ColumnMappingInput] = headers[i];
+          matched.add(i);
+          found = true;
+          break;
+        }
       }
     }
   }
