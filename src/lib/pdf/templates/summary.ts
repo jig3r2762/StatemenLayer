@@ -271,6 +271,7 @@ export function buildHtml(params: {
   <body>
     <main>
       <section class="header">
+        ${account.logo_url ? `<img src="${escapeHtml(account.logo_url)}" alt="${escapeHtml(account.firm_name)}" style="height:40px;max-width:180px;object-fit:contain;margin-bottom:10px;display:block;" />` : ""}
         <h1 class="firm">${escapeHtml(account.firm_name)}</h1>
         <div class="meta">
           <div>

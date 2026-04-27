@@ -96,11 +96,13 @@ export async function sendOwnerEmail(params: {
   webViewUrl: string | null;
   fromEmail: string;
   firmName: string;
+  replyTo?: string;
   reportId?: string;
 }): Promise<{ id: string } | { error: string }> {
   const { data, error } = await getResend().emails.send({
     from: `${params.firmName} <${params.fromEmail}>`,
     to: params.ownerEmail,
+    replyTo: params.replyTo ?? undefined,
     subject: `Your ${formatMonth(params.reportMonth)} Property Statement - ${params.propertyAddress}`,
     html: buildEmailHtml(params),
     tags: params.reportId ? [{ name: "report_id", value: params.reportId }] : undefined,

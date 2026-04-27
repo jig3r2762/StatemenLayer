@@ -29,7 +29,7 @@ export async function POST(
 
   const { data: account } = await supabaseAdmin
     .from("accounts")
-    .select("id, firm_name")
+    .select("id, firm_name, from_name, reply_to_email")
     .eq("clerk_user_id", userId)
     .single();
 
@@ -102,7 +102,8 @@ export async function POST(
       pdfUrl: signedPdfUrl,
       webViewUrl: report.web_token ? `${baseUrl}/r/${report.web_token}` : null,
       fromEmail,
-      firmName: account.firm_name,
+      firmName: account.from_name?.trim() || account.firm_name,
+      replyTo: account.reply_to_email ?? undefined,
       reportId: report.id,
     });
 

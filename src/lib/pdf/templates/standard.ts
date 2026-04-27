@@ -408,6 +408,7 @@ export function buildHtml(params: {
   <body>
     <section class="page">
       <section class="hero">
+        ${account.logo_url ? `<img src="${escapeHtml(account.logo_url)}" alt="${escapeHtml(account.firm_name)}" style="height:44px;max-width:200px;object-fit:contain;margin-bottom:14px;display:block;" />` : ""}
         <h1>${escapeHtml(account.firm_name)}</h1>
         <div class="hero-grid">
           <div>

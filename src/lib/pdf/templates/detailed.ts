@@ -65,10 +65,12 @@ function buildTransactionSection(params: {
 
   const content = groups
     .map((group) => {
+      const hasUnit = group.items.some((item) => item.unit);
       const rows = group.items
         .map(
           (item) => `<tr>
             <td>${escapeHtml(item.date)}</td>
+            ${hasUnit ? `<td>${escapeHtml(item.unit ?? "—")}</td>` : ""}
             <td>${escapeHtml(item.description)}</td>
             <td>${formatAmount(item.amount, numberFormat)}</td>
           </tr>`
@@ -87,6 +89,7 @@ function buildTransactionSection(params: {
           <thead style="--thead-brand: ${brandColor}">
             <tr>
               <th>Date</th>
+              ${hasUnit ? "<th>Unit</th>" : ""}
               <th>Description</th>
               <th>Amount</th>
             </tr>
@@ -509,6 +512,7 @@ export function buildHtml(params: {
   </head>
   <body>
     <section class="hero">
+      ${account.logo_url ? `<img src="${escapeHtml(account.logo_url)}" alt="${escapeHtml(account.firm_name)}" style="height:44px;max-width:200px;object-fit:contain;margin-bottom:14px;display:block;" />` : ""}
       <h1>${escapeHtml(account.firm_name)}</h1>
       <div class="hero-grid">
         <div>
