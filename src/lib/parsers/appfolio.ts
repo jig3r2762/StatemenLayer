@@ -8,6 +8,7 @@ import {
   extractMonth,
   computeTotals,
   blankReport,
+  findHeaderRow,
 } from "./normalize";
 
 // ─────────────────────────────────────────────────────────────
@@ -27,7 +28,12 @@ const AF_SIGNATURES = {
   line_item_description: ["description", "memo", "transaction description", "notes"],
   line_item_category: ["category", "type", "account", "gl account", "transaction type"],
   line_item_amount: ["amount", "total", "debit", "credit", "charge", "payment"],
+  unit: ["unit", "unit number", "suite", "apt"],
+  payee: ["payee", "payer", "payee/payer", "vendor", "tenant", "paid to", "paid by"],
 };
+
+// Flat keyword list used for header-row detection (defined after AF_SIGNATURES)
+const AF_KEYWORDS = Object.values(AF_SIGNATURES).flat();
 
 // Known AppFolio-specific header fingerprints (row 1 contains these)
 export const APPFOLIO_FINGERPRINTS = [
@@ -41,7 +47,12 @@ export const APPFOLIO_FINGERPRINTS = [
 export function isAppFolioFile(headers: string[]): boolean {
   const lower = headers.map((h) => h.toLowerCase().trim());
   const combined = lower.join(" ");
-  return APPFOLIO_FINGERPRINTS.some((fp) => combined.includes(fp));
+  if (APPFOLIO_FINGERPRINTS.some((fp) => combined.includes(fp))) return true;
+  // GL-style export: Property + Account + Balance columns together = AppFolio GL format
+  const hasProperty = lower.some((h) => h === "property");
+  const hasAccount = lower.some((h) => h === "account");
+  const hasBalance = lower.some((h) => h === "balance");
+  return hasProperty && hasAccount && hasBalance;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -83,29 +94,43 @@ export function parseAppFolioFile(
   let rows: Record<string, string>[] = [];
   let headers: string[] = [];
 
+  let skippedRows = 0;
   try {
     if (fileName.match(/\.(xlsx|xls)$/i)) {
       const wb = XLSX.read(fileContent as ArrayBuffer, { type: "array" });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const raw = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
-      if (raw.length < 2) {
+      const rawXlsx = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
+      if (rawXlsx.length < 2) {
         return errorResult("File appears empty — no data rows found.");
       }
-      headers = (raw[0] as string[]).map(String);
-      rows = raw.slice(1).map((row) =>
-        Object.fromEntries(headers.map((h, i) => [h, String((row as string[])[i] ?? "")]))
-      );
+      const rawRows = rawXlsx.map((r) => (r as string[]).map(String));
+      const headerIdx = findHeaderRow(rawRows, AF_KEYWORDS);
+      skippedRows = headerIdx;
+      const rawHeaders = rawRows[headerIdx].map((h) => h.trim());
+      const validCols = rawHeaders.map((h, i) => ({ h, i })).filter(({ h }) => h.length > 0);
+      headers = validCols.map(({ h }) => h);
+      rows = rawRows
+        .slice(headerIdx + 1)
+        .filter((row) => row.some((c) => c.trim().length > 0))
+        .map((row) => Object.fromEntries(validCols.map(({ h, i }) => [h, String(row[i] ?? "")])));
     } else {
-      const parsed = Papa.parse<Record<string, string>>(fileContent as string, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: (h) => h.trim(),
+      const rawParsed = Papa.parse<string[]>(fileContent as string, {
+        header: false,
+        skipEmptyLines: false,
       });
-      if (parsed.errors.length > 0 && parsed.data.length === 0) {
-        return errorResult(`CSV parse error: ${parsed.errors[0].message}`);
+      if (rawParsed.errors.length > 0 && rawParsed.data.length === 0) {
+        return errorResult(`CSV parse error: ${rawParsed.errors[0].message}`);
       }
-      headers = parsed.meta.fields ?? [];
-      rows = parsed.data;
+      const rawRows = (rawParsed.data as string[][]).map((r) => r.map(String));
+      const headerIdx = findHeaderRow(rawRows, AF_KEYWORDS);
+      skippedRows = headerIdx;
+      const rawHeaders = rawRows[headerIdx].map((h) => h.trim());
+      const validCols = rawHeaders.map((h, i) => ({ h, i })).filter(({ h }) => h.length > 0);
+      headers = validCols.map(({ h }) => h);
+      rows = rawRows
+        .slice(headerIdx + 1)
+        .filter((row) => row.some((c) => c.trim().length > 0))
+        .map((row) => Object.fromEntries(validCols.map(({ h, i }) => [h, String(row[i] ?? "")])));
     }
   } catch (err) {
     return errorResult(`Failed to read file: ${err instanceof Error ? err.message : String(err)}`);
@@ -119,9 +144,8 @@ export function parseAppFolioFile(
   const { mapping: autoMapping } = detectColumns(headers);
   const mapping = { ...autoMapping, ...savedMapping };
 
-  // Check if critical fields are mapped
+  // Check if critical fields are mapped (owner_name is optional — GL-style exports omit it)
   const criticalFields: (keyof ColumnMappingInput)[] = [
-    "owner_name",
     "property_address",
     "line_item_date",
     "line_item_description",
@@ -152,8 +176,12 @@ export function parseAppFolioFile(
     const key = `${ownerName}||${address}`;
     if (!ownerMap.has(key)) {
       const report = blankReport("appfolio");
-      report.owner_name = ownerName ?? "Unknown Owner";
       report.property_address = address ?? "Unknown Address";
+      // GL-style exports have no owner column — fall back to property name
+      report.owner_name = ownerName || address || "Unknown Owner";
+      if (!ownerName && address) {
+        report.parse_warnings.push("Owner name not found — using property name.");
+      }
       ownerMap.set(key, report);
     }
 
@@ -170,10 +198,13 @@ export function parseAppFolioFile(
     const desc = getField(row, mapping.line_item_description) ?? "";
     const catRaw = getField(row, mapping.line_item_category) ?? "";
     const amountRaw = getField(row, mapping.line_item_amount) ?? "0";
+    const unitRaw = getField(row, mapping.unit)?.trim();
+    const payeeRaw = getField(row, mapping.payee)?.trim();
 
     if (!desc && !amountRaw) continue;
 
     const amount = parseAmount(amountRaw);
+    // Use sign of amount as fallback category when no category column present
     const category = catRaw ? normalizeCategory(catRaw) : amount >= 0 ? "income" : "expense";
 
     const lineItem: LineItem = {
@@ -182,6 +213,8 @@ export function parseAppFolioFile(
       category,
       amount,
       raw_category: catRaw || undefined,
+      unit: unitRaw && unitRaw.toLowerCase() !== "all" ? unitRaw : undefined,
+      payee: payeeRaw || undefined,
     };
     report.line_items.push(lineItem);
 
@@ -205,6 +238,12 @@ export function parseAppFolioFile(
   }
 
   const reports = Array.from(ownerMap.values());
+
+  for (const report of reports) {
+    if (skippedRows > 0) {
+      report.parse_warnings.push(`Skipped ${skippedRows} metadata row(s) before headers.`);
+    }
+  }
 
   // If no summary totals were in the file, compute from line items
   for (const report of reports) {

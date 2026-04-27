@@ -104,6 +104,29 @@ export function computeTotals(items: LineItem[]): {
 }
 
 // ─────────────────────────────────────────────────────────────
+// Find the real header row in files that have metadata rows
+// before the actual column headers (common in AppFolio/Buildium
+// exports which start with report title, date range, etc.)
+//
+// Scans up to 10 rows; returns the index of the first row that
+// has ≥ 3 non-empty cells AND ≥ 2 cells matching known column
+// signature keywords. Falls back to row 0 if nothing matches.
+// ─────────────────────────────────────────────────────────────
+export function findHeaderRow(rawRows: string[][], signatureKeywords: string[]): number {
+  const lowerKw = signatureKeywords.map((k) => k.toLowerCase());
+  for (let i = 0; i < Math.min(rawRows.length, 10); i++) {
+    const cells = rawRows[i].map((c) => String(c).toLowerCase().trim());
+    const nonEmpty = cells.filter((c) => c.length > 0);
+    if (nonEmpty.length < 3) continue;
+    const matches = nonEmpty.filter((cell) =>
+      lowerKw.some((kw) => cell.includes(kw) || kw.includes(cell))
+    ).length;
+    if (matches >= 2) return i;
+  }
+  return 0;
+}
+
+// ─────────────────────────────────────────────────────────────
 // Build a blank NormalizedReport shell
 // ─────────────────────────────────────────────────────────────
 export function blankReport(pms_source: PmsSource): NormalizedReport {

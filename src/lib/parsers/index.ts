@@ -1,8 +1,15 @@
 import type { ParseResult, PmsSource, ColumnMappingInput } from "@/types/parsers";
 import { isAppFolioFile, parseAppFolioFile, detectColumns as afDetect } from "./appfolio";
 import { isBuildiumFile, parseBuildiumFile, detectColumns as bdDetect } from "./buildium";
+import { findHeaderRow } from "./normalize";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
+
+// Keywords used to locate the real header row during PMS detection
+const DETECT_KEYWORDS = [
+  "owner", "property", "date", "amount", "description", "account",
+  "balance", "management", "net", "income", "expense", "unit",
+];
 
 // ─────────────────────────────────────────────────────────────
 // Sniff the PMS type by reading row 1 headers from the file
@@ -16,14 +23,18 @@ export function detectPmsType(
     if (fileName.match(/\.(xlsx|xls)$/i)) {
       const wb = XLSX.read(fileContent as ArrayBuffer, { type: "array" });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const raw = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
-      headers = ((raw[0] as string[]) ?? []).map(String);
+      const rawXlsx = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
+      const rawRows = rawXlsx.map((r) => (r as string[]).map(String));
+      const headerIdx = findHeaderRow(rawRows, DETECT_KEYWORDS);
+      headers = rawRows[headerIdx].map(String);
     } else {
       const parsed = Papa.parse<string[]>(fileContent as string, {
         header: false,
-        preview: 1,
+        preview: 10,
       });
-      headers = ((parsed.data[0] as string[]) ?? []).map(String);
+      const rawRows = (parsed.data as string[][]).map((r) => r.map(String));
+      const headerIdx = findHeaderRow(rawRows, DETECT_KEYWORDS);
+      headers = rawRows[headerIdx].map(String);
     }
   } catch {
     return "unknown";

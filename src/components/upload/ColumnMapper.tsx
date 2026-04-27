@@ -11,7 +11,7 @@ interface ColumnMapperProps {
 }
 
 const FIELD_LABELS: Record<keyof ColumnMappingInput, { label: string; required: boolean }> = {
-  owner_name:            { label: "Owner Name",            required: true },
+  owner_name:            { label: "Owner Name",            required: false },
   property_address:      { label: "Property Address",      required: true },
   report_month:          { label: "Report Month / Period", required: false },
   total_income:          { label: "Total Income",          required: false },
@@ -20,8 +20,10 @@ const FIELD_LABELS: Record<keyof ColumnMappingInput, { label: string; required: 
   net_to_owner:          { label: "Net to Owner",          required: false },
   line_item_date:        { label: "Line Item Date",        required: true },
   line_item_description: { label: "Line Item Description", required: true },
-  line_item_category:    { label: "Line Item Category",    required: false },
+  line_item_category:    { label: "Line Item Category / GL Account", required: false },
   line_item_amount:      { label: "Line Item Amount",      required: true },
+  unit:                  { label: "Unit / Suite",          required: false },
+  payee:                 { label: "Payee / Payer",         required: false },
 };
 
 const labelStyle: React.CSSProperties = {

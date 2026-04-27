@@ -6,6 +6,8 @@ export interface LineItem {
   category: "income" | "expense" | "fee";
   amount: number;
   raw_category?: string;
+  unit?: string;
+  payee?: string;
 }
 
 export interface NormalizedReport {
@@ -44,4 +46,6 @@ export interface ColumnMappingInput {
   line_item_description: string;
   line_item_category: string;
   line_item_amount: string;
+  unit?: string;
+  payee?: string;
 }

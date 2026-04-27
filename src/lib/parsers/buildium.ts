@@ -8,6 +8,7 @@ import {
   extractMonth,
   computeTotals,
   blankReport,
+  findHeaderRow,
 } from "./normalize";
 
 // ─────────────────────────────────────────────────────────────
@@ -27,6 +28,8 @@ const BD_SIGNATURES = {
   line_item_category: ["category", "account", "type", "chart of accounts", "transaction type", "gl account"],
   line_item_amount: ["amount", "total", "payment", "charge", "credit", "debit"],
 };
+
+const BD_KEYWORDS = Object.values(BD_SIGNATURES).flat();
 
 // Known Buildium-specific header fingerprints
 export const BUILDIUM_FINGERPRINTS = [
@@ -78,29 +81,43 @@ export function parseBuildiumFile(
   let rows: Record<string, string>[] = [];
   let headers: string[] = [];
 
+  let skippedRows = 0;
   try {
     if (fileName.match(/\.(xlsx|xls)$/i)) {
       const wb = XLSX.read(fileContent as ArrayBuffer, { type: "array" });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const raw = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
-      if (raw.length < 2) {
+      const rawXlsx = XLSX.utils.sheet_to_json<string[]>(ws, { header: 1, defval: "" });
+      if (rawXlsx.length < 2) {
         return errorResult("File appears empty — no data rows found.");
       }
-      headers = (raw[0] as string[]).map(String);
-      rows = raw.slice(1).map((row) =>
-        Object.fromEntries(headers.map((h, i) => [h, String((row as string[])[i] ?? "")]))
-      );
+      const rawRows = rawXlsx.map((r) => (r as string[]).map(String));
+      const headerIdx = findHeaderRow(rawRows, BD_KEYWORDS);
+      skippedRows = headerIdx;
+      const rawHeaders = rawRows[headerIdx].map((h) => h.trim());
+      const validCols = rawHeaders.map((h, i) => ({ h, i })).filter(({ h }) => h.length > 0);
+      headers = validCols.map(({ h }) => h);
+      rows = rawRows
+        .slice(headerIdx + 1)
+        .filter((row) => row.some((c) => c.trim().length > 0))
+        .map((row) => Object.fromEntries(validCols.map(({ h, i }) => [h, String(row[i] ?? "")])));
     } else {
-      const parsed = Papa.parse<Record<string, string>>(fileContent as string, {
-        header: true,
-        skipEmptyLines: true,
-        transformHeader: (h) => h.trim(),
+      const rawParsed = Papa.parse<string[]>(fileContent as string, {
+        header: false,
+        skipEmptyLines: false,
       });
-      if (parsed.errors.length > 0 && parsed.data.length === 0) {
-        return errorResult(`CSV parse error: ${parsed.errors[0].message}`);
+      if (rawParsed.errors.length > 0 && rawParsed.data.length === 0) {
+        return errorResult(`CSV parse error: ${rawParsed.errors[0].message}`);
       }
-      headers = parsed.meta.fields ?? [];
-      rows = parsed.data;
+      const rawRows = (rawParsed.data as string[][]).map((r) => r.map(String));
+      const headerIdx = findHeaderRow(rawRows, BD_KEYWORDS);
+      skippedRows = headerIdx;
+      const rawHeaders = rawRows[headerIdx].map((h) => h.trim());
+      const validCols = rawHeaders.map((h, i) => ({ h, i })).filter(({ h }) => h.length > 0);
+      headers = validCols.map(({ h }) => h);
+      rows = rawRows
+        .slice(headerIdx + 1)
+        .filter((row) => row.some((c) => c.trim().length > 0))
+        .map((row) => Object.fromEntries(validCols.map(({ h, i }) => [h, String(row[i] ?? "")])));
     }
   } catch (err) {
     return errorResult(`Failed to read file: ${err instanceof Error ? err.message : String(err)}`);
@@ -194,6 +211,12 @@ export function parseBuildiumFile(
   }
 
   const reports = Array.from(ownerMap.values());
+
+  for (const report of reports) {
+    if (skippedRows > 0) {
+      report.parse_warnings.push(`Skipped ${skippedRows} metadata row(s) before headers.`);
+    }
+  }
 
   for (const report of reports) {
     if (!report.total_income && !report.total_expenses) {
