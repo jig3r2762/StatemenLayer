@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Send, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Loader2, Send, CheckCircle2, AlertTriangle, X } from "lucide-react";
 import { formatMonth } from "@/lib/utils";
 import type { ReportBatch } from "@/types/database";
 import Link from "next/link";
@@ -18,6 +18,8 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
   const router = useRouter();
   const [sending, setSending] = useState(false);
   const [localDone, setLocalDone] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [sendErrors, setSendErrors] = useState<string[]>([]);
 
   const isReady = batch.status === "ready" || batch.status === "partial";
   const isSent  = batch.status === "sent" || localDone;
@@ -28,13 +30,10 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
   const isSelective = selectedReportIds && selectedReportIds.length > 0;
   const sendCount = isSelective ? selectedReportIds.length : totalReports - missingEmailCount;
 
-  async function handleSend() {
-    const label = isSelective
-      ? `Send reports to ${sendCount} selected owner${sendCount !== 1 ? "s" : ""}?`
-      : `Send reports to ${sendCount} owner${sendCount !== 1 ? "s" : ""}? This cannot be undone.`;
-    if (!confirm(label)) return;
-
+  async function confirmSend() {
+    setShowConfirm(false);
     setSending(true);
+    setSendErrors([]);
     try {
       const body: { reportIds?: string[] } = {};
       if (isSelective) body.reportIds = selectedReportIds;
@@ -44,10 +43,14 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      if (res.ok) {
-        setLocalDone(true);
-        router.refresh();
+      const data = await res.json() as { sent?: number; failed?: number; errors?: string[] };
+      if (data.errors && data.errors.length > 0) {
+        setSendErrors(data.errors);
       }
+      if (res.ok && (!data.failed || data.failed === 0)) {
+        setLocalDone(true);
+      }
+      router.refresh();
     } finally {
       setSending(false);
     }
@@ -97,7 +100,7 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
             </Link>
           ) : (
             <button
-              onClick={handleSend}
+              onClick={() => setShowConfirm(true)}
               disabled={sending}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
@@ -123,6 +126,64 @@ export function BatchStickyBar({ batch, totalReports, sentCount, missingEmailCou
           </div>
         </div>
       </div>
+
+      {/* Send errors */}
+      {sendErrors.length > 0 && (
+        <div style={{ padding: "10px 32px 14px", borderTop: "1px solid #FEE2E2", background: "#FFF5F5" }}>
+          {sendErrors.map((e, i) => (
+            <div key={i} style={{ fontSize: 12, color: "#DC2626", display: "flex", alignItems: "flex-start", gap: 6, marginTop: i > 0 ? 4 : 0 }}>
+              <AlertTriangle style={{ width: 12, height: 12, flexShrink: 0, marginTop: 1 }} />
+              {e}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Confirm modal */}
+      {showConfirm && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(10,15,30,0.45)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ background: "white", borderRadius: 12, padding: "28px 32px", width: 420, maxWidth: "90vw", boxShadow: "0 20px 60px rgba(10,15,30,0.18)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ background: "#FEF3C7", borderRadius: 8, padding: 8, display: "flex" }}>
+                  <Send style={{ width: 18, height: 18, color: "#D97706" }} />
+                </div>
+                <span style={{ fontSize: 16, fontWeight: 700, color: "#0A0F1E", fontFamily: "var(--font-dm-sans, sans-serif)" }}>
+                  Confirm send
+                </span>
+              </div>
+              <button onClick={() => setShowConfirm(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: "#9CA3AF" }}>
+                <X style={{ width: 18, height: 18 }} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: 14, color: "#374151", margin: "0 0 6px", lineHeight: 1.5 }}>
+              {isSelective
+                ? <>Send reports to <strong>{sendCount} selected owner{sendCount !== 1 ? "s" : ""}</strong>?</>
+                : <>Send reports to <strong>{sendCount} owner{sendCount !== 1 ? "s" : ""}</strong>?</>
+              }
+            </p>
+            <p style={{ fontSize: 13, color: "#9CA3AF", margin: "0 0 24px" }}>
+              Owners will receive an email with their PDF attached. This action cannot be undone.
+            </p>
+
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setShowConfirm(false)}
+                style={{ padding: "9px 18px", fontSize: 13, fontWeight: 600, background: "white", color: "#374151", border: "1px solid #E5E7EB", borderRadius: 6, cursor: "pointer", fontFamily: "var(--font-dm-sans, sans-serif)" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSend}
+                style={{ padding: "9px 18px", fontSize: 13, fontWeight: 700, background: "#F59E0B", color: "#0A0F1E", border: "none", borderRadius: 6, cursor: "pointer", fontFamily: "var(--font-dm-sans, sans-serif)" }}
+              >
+                Yes, send reports
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
