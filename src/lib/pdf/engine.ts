@@ -27,7 +27,7 @@ async function getExecutablePath(): Promise<string> {
   }
 
   return chromium.executablePath(
-    "https://github.com/Sparticuz/chromium/releases/download/v147.0.0/chromium-v147.0.0-pack.tar"
+    "https://github.com/Sparticuz/chromium/releases/download/v147.0.0/chromium-v147.0.0-pack.x64.tar"
   );
 }
 
