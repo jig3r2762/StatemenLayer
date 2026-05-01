@@ -42,6 +42,11 @@ AGENT_MEMORY.md
 CODEX_TASKS.md
 CURSOR_TASKS.md
 
+# leads folder — contains API keys and raw lead data
+StatementLayer Leads/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel

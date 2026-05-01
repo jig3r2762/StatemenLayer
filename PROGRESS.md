@@ -5,11 +5,33 @@
 
 ---
 
-## Overall Status: LIVE ON VERCEL — PENDING WEBHOOKS + STRIPE
+## Overall Status: LIVE ON CUSTOM DOMAIN — BLOCKED ON RESEND + STRIPE
 
-**Current Phase:** Deployed + Live — Parser hardened for real-world CSVs
-**Last Updated:** 2026-04-27
-**Live URL:** https://statement-layer.vercel.app
+**Current Phase:** Custom domain live — email send blocked until Resend verified on statementlayer.com
+**Last Updated:** 2026-05-01
+**Live URL:** https://statementlayer.com
+**Old Vercel URL:** https://statement-layer.vercel.app (still works)
+
+---
+
+### Round 9 — Custom Domain + Clerk Production — COMPLETE ✅ (2026-05-01)
+
+- [x] **statementlayer.com purchased** on Namecheap (May 1, 2026 – May 1, 2027)
+- [x] **Namecheap DNS configured** — A record `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`
+- [x] **Vercel domain added** — `statementlayer.com` + `www.statementlayer.com` both connected, status: Ready
+- [x] **Clerk Production instance created** — switched from Development to Production
+- [x] **Clerk DNS verified** — 5 CNAME records added to Namecheap (clerk, accounts, clkmail, clk._domainkey, clk2._domainkey)
+- [x] **Clerk Production API keys** — updated in Vercel environment variables (`pk_live_` + `sk_live_`)
+- [ ] **Remove debug endpoints** — still pending (security risk):
+  - `GET /api/env-check` — dumps env var names
+  - `GET /api/account-check` — raw debug output
+
+---
+
+### Round 8 — Custom Send Modal + Debug Cleanup — PARTIAL ✅ (2026-04-29)
+
+- [x] **Custom send modal** — Replaced native `confirm()` with a styled modal before batch send; send errors are now surfaced inline in the modal instead of silently failing (commit: `e832287`)
+- [ ] **Remove debug endpoints** — `GET /api/env-check` + `GET /api/account-check` — security risk, delete before customer testing
 
 ---
 
@@ -293,14 +315,17 @@
 ### Remaining — PENDING ⏳
 - [x] Run migration 004 (`alter table owners add column property_address text`) — **DONE**
 - [x] Run migration 005 (`alter table accounts add column from_name/reply_to_email`) — **DONE**
-- [x] Resend API key + verified sending domain — **DONE** (send tested successfully with real email)
-- [x] Vercel deployment — **LIVE** at https://statement-layer.vercel.app (2026-04-27)
+- [x] Resend API key — **DONE** (key set, tested send to own email via shared domain)
+- [ ] Resend custom domain verified — **NEXT UP** — go to resend.com → Domains → Add `statementlayer.com` → add 3 DNS records to Namecheap
+- [x] Vercel deployment — **LIVE** at https://statementlayer.com (custom domain 2026-05-01)
 - [x] Production env vars set in Vercel dashboard — **DONE**
+- [x] Custom domain — **DONE** — statementlayer.com (Namecheap, purchased 2026-05-01)
+- [x] Clerk Production instance — **DONE** — switched from dev to prod, 5 DNS records verified
 - [ ] Anthropic API key — optional; Groq is active backup
-- [ ] Register Clerk webhook in Clerk dashboard → `https://statement-layer.vercel.app/api/webhooks/clerk`
-- [ ] Register Resend webhook in Resend dashboard → `https://statement-layer.vercel.app/api/webhooks/resend`
-- [ ] Stripe keys + webhook → `https://statement-layer.vercel.app/api/webhooks/stripe`
-- [ ] Custom domain
+- [x] Remove debug API routes (`/api/demo/env-check`, `/api/demo/account-check`) — **DONE** (deleted 2026-05-02)
+- [ ] Register Clerk webhook in Clerk dashboard → `https://statementlayer.com/api/webhooks/clerk`
+- [ ] Register Resend webhook in Resend dashboard → `https://statementlayer.com/api/webhooks/resend` (after domain verified)
+- [ ] Stripe keys + webhook → `https://statementlayer.com/api/webhooks/stripe`
 
 ---
 
@@ -309,10 +334,10 @@
 | Service | Key Set? | Notes |
 |---|---|---|
 | Supabase | ✅ | DB live, all 3 storage buckets created |
-| Clerk | ✅ | Dev keys working locally |
+| Clerk | ✅ | Production instance live on statementlayer.com — `pk_live_` + `sk_live_` keys in Vercel |
 | Anthropic | ❌ | Optional — Groq is active backup for AI commentary |
 | Groq | ✅ | `GROQ_API_KEY` set; llama-3.3-70b-versatile; used as AI commentary backup |
-| Resend | ❌ | **Blocker** — Add `RESEND_API_KEY` + verify sending domain before first send |
+| Resend | ⚠️ | API key ✅ set. Domain ❌ not verified — add statementlayer.com to Resend dashboard, paste 3 DNS records into Namecheap |
 | Stripe | ❌ | All Stripe keys empty |
 
 ---
