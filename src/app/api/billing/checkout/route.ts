@@ -21,6 +21,10 @@ export async function POST(req: Request) {
 
   if (!account) return NextResponse.json({ error: "Account not found" }, { status: 404 });
 
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return NextResponse.json({ error: "Billing is not yet available. Check back soon." }, { status: 503 });
+  }
+
   let customerId = account.stripe_id;
   if (!customerId) {
     const customer = await getStripe().customers.create({

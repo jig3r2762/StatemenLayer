@@ -28,12 +28,31 @@ export const metadata: Metadata = {
   title: "StatementLayer — Owner Reporting for Property Managers",
   description:
     "Generate personalized, branded owner statements from AppFolio and Buildium exports in one click.",
+  metadataBase: new URL("https://statementlayer.com"),
   icons: {
-    icon: [
-      { url: "/logo-mark.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/logo-mark.svg", type: "image/svg+xml" }],
     shortcut: "/logo-mark.svg",
     apple: "/logo-mark.svg",
+  },
+  openGraph: {
+    title: "StatementLayer — Owner Reporting for Property Managers",
+    description:
+      "Generate personalized, branded owner statements from AppFolio and Buildium exports in one click.",
+    url: "https://statementlayer.com",
+    siteName: "StatementLayer",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "StatementLayer — Owner Reporting for Property Managers",
+    description:
+      "Generate personalized, branded owner statements from AppFolio and Buildium exports in one click.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
   },
 };
 

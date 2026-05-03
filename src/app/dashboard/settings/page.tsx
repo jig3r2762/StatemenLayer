@@ -173,10 +173,10 @@ export default function SettingsPage() {
                   <div style={{ marginBottom: 20 }}>
                     <label style={labelStyle}>Company logo</label>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                      <div style={{ width: 72, height: 72, borderRadius: 8, background: "#F3F4F6", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                      <div style={{ width: 72, height: 72, borderRadius: "50%", background: "#F3F4F6", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                         {logoUrl
                           // eslint-disable-next-line @next/next/no-img-element
-                          ? <img src={logoUrl} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 6 }} />
+                          ? <img src={logoUrl} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           : <span style={{ fontSize: 11, color: "#9CA3AF", textAlign: "center", lineHeight: 1.3 }}>No logo</span>
                         }
                       </div>

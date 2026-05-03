@@ -18,20 +18,8 @@ export async function POST(req: Request) {
     .single();
 
   if (accountErr || !account) {
-    console.error("[upload] account lookup failed", {
-      userId,
-      supabaseUrl: process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "missing",
-      errorCode: accountErr?.code,
-      errorMsg: accountErr?.message,
-    });
-    return NextResponse.json({
-      error: "Account not found",
-      debug: {
-        userId,
-        url: (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "missing").slice(0, 40),
-        supabaseError: accountErr?.message ?? "no error, data was null",
-      },
-    }, { status: 404 });
+    console.error("[upload] account lookup failed", { userId, code: accountErr?.code, msg: accountErr?.message });
+    return NextResponse.json({ error: "Account not found" }, { status: 404 });
   }
 
   const formData = await req.formData();
@@ -41,12 +29,16 @@ export async function POST(req: Request) {
 
   if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
 
+  const fileName = file.name;
+  if (!/\.(csv|xlsx|xls)$/i.test(fileName)) {
+    return NextResponse.json({ error: "Only CSV and Excel files are supported" }, { status: 400 });
+  }
+
   // Size check: 25MB
   if (file.size > 25 * 1024 * 1024) {
     return NextResponse.json({ error: "File exceeds 25MB limit" }, { status: 400 });
   }
 
-  const fileName = file.name;
   const isExcel = /\.(xlsx|xls)$/i.test(fileName);
 
   let fileContent: string | ArrayBuffer;

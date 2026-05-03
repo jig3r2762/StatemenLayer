@@ -25,14 +25,14 @@ export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
-  if (!sig) {
-    return new NextResponse("Invalid signature", { status: 400 });
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET || !process.env.STRIPE_SECRET_KEY) {
+    return new NextResponse("Stripe not configured", { status: 400 });
   }
 
   let event: Stripe.Event;
 
   try {
-    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch {
     return new NextResponse("Invalid signature", { status: 400 });
   }

@@ -72,7 +72,7 @@ export async function POST(
   let sent = 0;
   let failed = 0;
   const baseUrl = process.env.BASE_URL ?? "";
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "noreply@statementlayer.local";
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "noreply@statementlayer.com";
 
   for (const report of (reports ?? []) as SendRow[]) {
     const owner = Array.isArray(report.owner) ? report.owner[0] : report.owner;

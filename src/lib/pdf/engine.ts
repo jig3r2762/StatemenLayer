@@ -33,6 +33,19 @@ async function getExecutablePath(): Promise<string> {
 
 const SERVERLESS_VIEWPORT = { width: 1280, height: 720 };
 
+async function resolveLogoBase64(url: string | null): Promise<string | null> {
+  if (!url) return null;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const buf = await res.arrayBuffer();
+    const mime = res.headers.get("content-type") ?? "image/png";
+    return `data:${mime};base64,${Buffer.from(buf).toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
 export async function generatePdf(params: {
   report: NormalizedReport;
   owner: Owner;
@@ -42,7 +55,9 @@ export async function generatePdf(params: {
 }): Promise<Buffer> {
   const { report, owner, account, attachmentUrls, trendData } = params;
   const template = getTemplate(owner.layout);
-  const html = template({ report, owner, account, attachmentUrls, trendData });
+  const logoDataUrl = await resolveLogoBase64(account.logo_url ?? null);
+  const accountForPdf = logoDataUrl ? { ...account, logo_url: logoDataUrl } : account;
+  const html = template({ report, owner, account: accountForPdf, attachmentUrls, trendData });
 
   let browser: Awaited<ReturnType<typeof puppeteer.launch>> | null = null;
 

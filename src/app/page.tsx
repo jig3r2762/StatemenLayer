@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { HeroDemo } from "./_components/HeroDemo";
 import { LandingNav } from "./_components/LandingNav";
+
+export const metadata: Metadata = {
+  title: "StatementLayer — Owner Statement Software for Property Managers",
+  description: "Automate owner statements from AppFolio or Buildium exports. Generate branded PDFs with AI commentary and deliver to every owner in under 2 minutes. 14-day free trial.",
+  alternates: { canonical: "https://statementlayer.com" },
+  openGraph: {
+    title: "StatementLayer — Owner Statement Software for Property Managers",
+    description: "Automate owner statements from AppFolio or Buildium exports. Generate branded PDFs with AI commentary and deliver to every owner in under 2 minutes.",
+    url: "https://statementlayer.com",
+  },
+};
 
 /* ── Logo mark SVG (inline, for dark backgrounds) ── */
 const LogoMark = () => (
@@ -55,9 +67,89 @@ const PRICING = [
   },
 ];
 
+const FAQ_ITEMS = [
+  {
+    q: "What is StatementLayer?",
+    a: "StatementLayer is owner statement software for property managers. It converts AppFolio or Buildium CSV exports into branded PDF reports with AI-written financial commentary and delivers them to every owner in one click — replacing hours of Excel work each month.",
+  },
+  {
+    q: "Does it work with AppFolio and Buildium?",
+    a: "Yes. StatementLayer auto-detects AppFolio and Buildium export formats. Drop in your CSV and it maps the columns, parses the data, and generates reports — no manual column mapping required on day one.",
+  },
+  {
+    q: "How long does it take to send statements to all owners?",
+    a: "Most property managers finish in under 2 minutes. Upload the CSV, review the AI-generated summaries, approve, and hit Send. All owners receive their personalized report simultaneously.",
+  },
+  {
+    q: "Can I white-label the reports with my own branding?",
+    a: "Yes. Upload your company logo, set your brand color, and customize the sender name. Every PDF and email arrives looking like it came directly from your firm — not from StatementLayer.",
+  },
+  {
+    q: "How much does StatementLayer cost?",
+    a: "Starter is $79/month for up to 75 doors and 10 owner profiles. Growth is $149/month for up to 200 doors with unlimited profiles and white-label branding. Agency is $299/month for unlimited doors with 5 user seats and a custom email domain. All plans include a 14-day free trial — no credit card required.",
+  },
+  {
+    q: "Do my owners need to create an account to view their statement?",
+    a: "No. Each owner receives a private, password-free web link unique to their report. They can view it in the browser or download the PDF — no signup, no login.",
+  },
+  {
+    q: "What happens if an owner doesn't open their report?",
+    a: "StatementLayer tracks email opens in real time. You'll see who has and hasn't viewed their report and can follow up directly with unread owners.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "StatementLayer",
+      url: "https://statementlayer.com",
+      description:
+        "Owner statement software for property managers. Converts AppFolio and Buildium CSV exports into branded PDF reports with AI commentary and delivers them to owners in one click.",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: [
+        { "@type": "Offer", name: "Starter", price: "79", priceCurrency: "USD", billingIncrement: "P1M" },
+        { "@type": "Offer", name: "Growth",  price: "149", priceCurrency: "USD", billingIncrement: "P1M" },
+        { "@type": "Offer", name: "Agency",  price: "299", priceCurrency: "USD", billingIncrement: "P1M" },
+      ],
+      featureList: [
+        "AppFolio CSV export support",
+        "Buildium CSV export support",
+        "AI-written financial commentary",
+        "White-label branded PDFs",
+        "Batch owner email delivery",
+        "Email open tracking",
+        "Owner management database",
+      ],
+      audience: { "@type": "Audience", audienceType: "Property Managers" },
+    },
+    {
+      "@type": "Organization",
+      name: "StatementLayer",
+      url: "https://statementlayer.com",
+      logo: "https://statementlayer.com/logo.svg",
+      description: "Owner financial reporting software for professional property managers across the US.",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+        "@type": "Question",
+        name: q,
+        acceptedAnswer: { "@type": "Answer", text: a },
+      })),
+    },
+  ],
+};
+
 export default function LandingPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#FAF8F4", color: "#111827", fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── Nav ── */}
       <LandingNav />
@@ -249,6 +341,29 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── FAQ ── */}
+      <section id="faq" className="landing-section" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+          <div style={{ marginBottom: 56 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D97706", marginBottom: 16 }}>FAQ</div>
+            <h2 style={{ fontFamily: "var(--font-display-serif, Georgia, serif)", fontSize: "clamp(32px, 4vw, 48px)", color: "#111827", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+              Common questions.
+            </h2>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {FAQ_ITEMS.map(({ q, a }) => (
+              <details key={q} style={{ background: "white", border: "1px solid #E5E7EB", borderRadius: 8, overflow: "hidden" }}>
+                <summary style={{ padding: "18px 24px", fontSize: 15, fontWeight: 600, color: "#111827", cursor: "pointer", listStyle: "none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
+                  {q}
+                  <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: "50%", background: "#F3F4F6", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "#6B7280" }}>+</span>
+                </summary>
+                <div style={{ padding: "0 24px 20px", fontSize: 14, color: "#4B5563", lineHeight: 1.7 }}>{a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA Banner ── */}
       <section className="landing-section" style={{ background: "#FAF8F4", padding: "96px 32px" }}>
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
@@ -288,7 +403,7 @@ export default function LandingPage() {
           </div>
           {/* Links */}
           {[
-            { heading: "Product",  links: [["#features", "Features"], ["#how", "How it works"], ["#pricing", "Pricing"]] },
+            { heading: "Product",  links: [["#features", "Features"], ["#how", "How it works"], ["#pricing", "Pricing"], ["#faq", "FAQ"]] },
             { heading: "Account",  links: [["/sign-in", "Sign in"], ["/sign-up", "Start free trial"]] },
             { heading: "Legal",    links: [["#", "Privacy"], ["#", "Terms"], ["#", "Security"]] },
           ].map(({ heading, links }) => (

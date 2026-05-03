@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /r/
+Disallow: /api/
+
+Sitemap: https://statementlayer.com/sitemap.xml
