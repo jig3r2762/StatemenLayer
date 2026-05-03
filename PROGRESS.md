@@ -5,12 +5,47 @@
 
 ---
 
-## Overall Status: LIVE ON CUSTOM DOMAIN — BLOCKED ON RESEND + STRIPE
+## Overall Status: LIVE — WEBHOOKS + SEO DONE — BLOCKED ON STRIPE
 
-**Current Phase:** Custom domain live — email send blocked until Resend verified on statementlayer.com
-**Last Updated:** 2026-05-01
+**Current Phase:** Production fully wired. Waiting on Stripe India approval. Cold outreach next.
+**Last Updated:** 2026-05-03
 **Live URL:** https://statementlayer.com
 **Old Vercel URL:** https://statement-layer.vercel.app (still works)
+
+---
+
+### Round 10 — Webhooks + SEO + Security + Bug Fixes — COMPLETE ✅ (2026-05-03)
+
+#### Infrastructure / Webhooks
+- [x] **Zoho DKIM verified** — 1024-bit key (selector: zmail) added to Namecheap, verified in Zoho Mail
+- [x] **Clerk webhook registered** — `https://statementlayer.com/api/webhooks/clerk`, event: `user.created`, `CLERK_WEBHOOK_SECRET` added to Vercel
+- [x] **Resend webhook registered** — `https://statementlayer.com/api/webhooks/resend`, events: delivered/opened/clicked/bounced/complained, `RESEND_WEBHOOK_SECRET` added to Vercel
+- [x] **Vercel env vars updated** — `RESEND_FROM_EMAIL=noreply@statementlayer.com`, `BASE_URL=https://statementlayer.com`
+- [x] **Google Search Console verified** — Domain property `statementlayer.com`, TXT record added to Namecheap
+
+#### SEO
+- [x] **robots.txt** — `public/robots.txt` created; allows `/`, blocks `/dashboard`, `/api`, `/sign-in`, `/sign-up`, `/r/`
+- [x] **sitemap.xml** — `src/app/sitemap.ts` (Next.js App Router, auto-serves at `/sitemap.xml`); added to public routes in `proxy.ts` (was being blocked by Clerk and redirecting to sign-in)
+- [x] **Open Graph + Twitter card tags** — added to `src/app/layout.tsx` with `metadataBase`
+- [x] **Page-level metadata** — `src/app/page.tsx` overrides layout with keyword-rich title: "Owner Statement Software for Property Managers"
+- [x] **JSON-LD schema** — `SoftwareApplication` + `FAQPage` + `Organization` injected into landing page; makes AI models (ChatGPT, Perplexity, Gemini) cite the product
+- [x] **FAQ section** — 7 questions added to landing page with accordion UI; powers FAQPage schema and Google rich results
+- [x] **GSC sitemap submitted** — `https://statementlayer.com/sitemap.xml` submitted and verified
+
+#### Security Fixes
+- [x] **Debug info leak removed** — `/api/upload` was returning Supabase URL + error details in JSON response; now returns only generic error message (still logs server-side)
+- [x] **File type validation** — `/api/upload` now rejects non-CSV/Excel files with a clear error before processing
+- [x] **Stripe crash fix** — `/api/billing/checkout` and `/api/billing/portal` returned unhandled exceptions when `STRIPE_SECRET_KEY` was missing; now return `503` with a friendly message
+- [x] **Stripe webhook crash fix** — `/api/webhooks/stripe` now exits early (400) instead of crashing when Stripe env vars are missing
+
+#### Bug Fixes
+- [x] **PDF logo blank** — `src/lib/pdf/engine.ts` now fetches `account.logo_url` server-side and converts to base64 data URL before passing to Puppeteer; no more blank logos due to Puppeteer unable to reach Supabase URLs
+- [x] **Settings logo preview** — Changed from `borderRadius: 8` (square) to `borderRadius: "50%"` (circular); `objectFit: "cover"` fills the circle cleanly
+- [x] **Email from address fallback** — Changed from `noreply@statementlayer.local` to `noreply@statementlayer.com`
+
+#### Remaining
+- [ ] Stripe keys + webhook → waiting on India application approval (submitted 2026-05-03)
+- [ ] Cold email outreach — 397 leads in `StatementLayer Leads/output/day1_send_now.csv` — run `/money-outreach` to write sequences, then set up Instantly.ai or Lemlist
 
 ---
 
