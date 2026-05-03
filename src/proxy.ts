@@ -8,6 +8,8 @@ const isPublicRoute = createRouteMatcher([
   "/r/(.*)",               // public tokenized web-view
   "/api/demo/(.*)",        // demo parse endpoint — no auth
   "/api/webhooks/(.*)",    // Stripe + Resend webhooks (verify internally)
+  "/sitemap.xml",
+  "/robots.txt",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
